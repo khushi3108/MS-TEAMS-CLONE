@@ -1,11 +1,10 @@
-const myexpress = require("express");
-const app = myexpress()//creating app type of express.
+const express = require('express');
+const app = express()//creating app type of express.
 const http = require('http').Server(app)
-const reqsocket = require('socket.io')
-const io = reqsocket(http)
+const io = require('socket.io')(http)
 const port= 3000 || process.env.PORT
 //loading static files from thier directory
-app.use(myexpress.static(__dirname + "/public"))
+app.use(express.static(__dirname + "/public"))
 
 let clients = 0
 //initial clients =0
@@ -14,11 +13,11 @@ io.on('connection', function (socket) {
     socket.on("NewUser", function () {
         if (clients < 2) {
             if (clients == 1) {
-                this.emit('createPeer')//chk if no of clients <2 and if =1 then we want socket to make a callback to createPeer
+                this.emit('createClient')//chk if no of clients <2 and if =1 then we want socket to make a callback to createPeer
             }
         }
         else
-            this.emit('activeSession')//session already going on
+            this.emit('sessionActive')//session already going on
         clients++;
     })
     socket.on('offer', makeOffer)
