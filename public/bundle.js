@@ -8333,7 +8333,7 @@ navigator.mediaDevices.getUserMedia({ video: {facingMode:"user"}, audio: true })
                     vid.volume = 1
             })
             }
-    //function when 2 people are chatting and session is live and another persin with sam url tries to join
+    //function when 2 people are chatting and session is live and another person with same url tries to join
     function activeSession(){
         document.send('Session in progress. Please wait or try again later when room has less than 2 people')
     }
@@ -8382,4 +8382,32 @@ function CreateDiv() {
     if (checkboxTheme.checked == true)
         document.querySelector('#muteText').style.color = "#DBE6FD"
 }
+//adding chat box features
+$(function(){
+	var arrow = $('.chat-head img')
+	var textarea = $('.chat-text textarea')
+
+	arrow.on('click', function(){
+		var src = arrow.attr('src')
+
+		$('.chat-body').slideToggle('fast')
+		if(src == 'https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_down-16.png'){
+			arrow.attr('src', 'https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_up-16.png')
+		}
+		else{
+			arrow.attr('src', 'https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_down-16.png')
+		}
+	})
+
+	textarea.keypress(function(event) {
+		var $this = $(this)
+
+		if(event.keyCode == 13){
+			var msg = $this.val()
+			$this.val('')
+			$('.msg-insert').prepend("<div class='msg-send'>"+msg+"</div>")
+			}
+	})
+
+})
 },{"simple-peer":28}]},{},[35]);
