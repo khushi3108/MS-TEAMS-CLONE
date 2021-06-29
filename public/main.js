@@ -98,16 +98,16 @@ navigator.mediaDevices.getUserMedia({ video: {facingMode:"user"}, audio: true })
 //in case of dark theme and on click beh to mute and unmute
 checkboxTheme.addEventListener('click', () => {
     if (checkboxTheme.checked == true) {
-        document.body.style.backgroundColor = '#343a40'
+        document.body.style.backgroundColor = '#464775'
         if (document.querySelector('#muteText')) {
-            document.querySelector('#muteText').style.color = "#DBE6FD"
+            document.querySelector('#muteText').style.color = "#f5f5f5c2"
         }
 
     }
     else {
-        document.body.style.backgroundColor = '#DBE6FD'
+        document.body.style.backgroundColor = '#f5f5f5c2'
         if (document.querySelector('#muteText')) {
-            document.querySelector('#muteText').style.color = "#343a40"
+            document.querySelector('#muteText').style.color = "#464775"
         }
     }
 }
@@ -120,9 +120,9 @@ function CreateDiv() {
     div.innerHTML = "Tap to Mute/Unmute"
     document.querySelector('#peerVid').appendChild(div)
     if (checkboxTheme.checked == true)
-        document.querySelector('#muteText').style.color = "#DBE6FD"
+        document.querySelector('#muteText').style.color = "#f5f5f5c2"
 }
-//adding chat box features
+//adding chat box features using jquery 
 $(function(){
 	var arrow = $('.chat-head img')
 	var textarea = $('.chat-text textarea')
