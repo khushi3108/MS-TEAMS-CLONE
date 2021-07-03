@@ -23,6 +23,14 @@ io.on('connection', function (socket) {
     socket.on('offer', makeOffer)
     socket.on('Answer', sendAnswer)
     socket.on('disconnect', Disconnect)//if window closed disconnect should run which will decrease the clients
+    socket.on('Offer', (data) => {
+        this.broadcast.emit('Offer', data);
+      });
+    
+      socket.on('initiate', () => {
+        this.emit('initiate');
+      });
+
 })
 
 function Disconnect() {

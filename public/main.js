@@ -1,7 +1,8 @@
 let Peer = require('simple-peer')
 let socket = io() // initializing socket element which connects directly to host .
-const checkboxTheme = document.querySelector('#theme')//for adding theme fns
+const checkboxTheme = document.querySelector('.theme')//for adding theme fns
 const video = document.querySelector('video')//This is the video while video streaming.
+var text ='session active. Please visit when clients less than 2'
 let client = {}
 video.muted = true //Here we have muted this video so that we get to hear other person's voice in the video call and not just ours.
 
@@ -13,7 +14,7 @@ navigator.mediaDevices.getUserMedia({ video: {facingMode:"user"}, audio: true })
      socket.emit('NewUser')//alert sent to our backend server.js using socket
      video.srcObject = stream
      video.play(); //user can see his/her own video stream
-     function NewPeer(val){
+     function newPeer(val){
         let peer = new Peer({ initiator: (val == 'init')? true:false , trickle: false , stream: stream}) 
         
         /*Creating a new peer for connection -the initiator parameter is matched with the type(val passed 
@@ -33,7 +34,7 @@ navigator.mediaDevices.getUserMedia({ video: {facingMode:"user"}, audio: true })
      //function to create a new peer which will be called when an offer has to be made of type initiator
       function createPeer(){
          client.getAnswer = false//setting initial ans to false
-         let peer = NewPeer('init')//getting our peer from the NewPeer() created 
+         let peer = newPeer('init')//getting our peer from the NewPeer() created 
          //Fired when the peer wants to send signaling data to the remote peer.
          peer.on('signal', data => {
              if(!client.getAnswer)//if ans is true
@@ -43,7 +44,7 @@ navigator.mediaDevices.getUserMedia({ video: {facingMode:"user"}, audio: true })
      }
      //function of type not-init and here it's used to send final answer to client when offer fn is itself not called
      function finalAnswer(offer){
-         let peer = NewPeer('not-init')
+         let peer = newPeer('not-init')
          peer.on('signal',data=>{
              socket.emit('Answer',data)
          })
@@ -59,7 +60,7 @@ navigator.mediaDevices.getUserMedia({ video: {facingMode:"user"}, audio: true })
     }
     
     function createVideoStream(stream){
-            CreateDiv() 
+            createDiv() 
             let vid = document.createElement('video')
             vid.id = 'peerVideo'
             vid.srcObject = stream
@@ -75,10 +76,10 @@ navigator.mediaDevices.getUserMedia({ video: {facingMode:"user"}, audio: true })
             }
     //function when 2 people are chatting and session is live and another person with same url tries to join
     function activeSession(){
-        document.send('Session in progress. Please wait or try again later when room has less than 2 people')
+        document.send(warning)
     }
     
-    function RemovePeer() {
+    function removePeer() {
         document.getElementById("peerVideo").remove();
         document.getElementById("muteText").remove();
         if (client.peer) {
@@ -90,7 +91,7 @@ navigator.mediaDevices.getUserMedia({ video: {facingMode:"user"}, audio: true })
     socket.on('backAns',signallingAns)
     socket.on('sessionActive',activeSession)
     socket.on('createClient',createPeer)
-    socket.on('Disconnect', RemovePeer)
+    socket.on('Disconnect', removePeer)
  })
 
 //else if the user doesn't give the permission(onrejected) we catch the error and display it
@@ -113,7 +114,7 @@ checkboxTheme.addEventListener('click', () => {
 }
 )
 //for createvideostream fn in case of mute and unmute
-function CreateDiv() {
+function createDiv() {
     let div = document.createElement('div')
     div.setAttribute('class', "centered")
     div.id = "muteText"
@@ -122,7 +123,7 @@ function CreateDiv() {
     if (checkboxTheme.checked == true)
         document.querySelector('#muteText').style.color = "#f5f5f5c2"
 }
-//adding chat box features using jquery 
+//adding chat box features 
 $(function(){
 	var arrow = $('.chat-head img')
 	var textarea = $('.chat-text textarea')
@@ -150,3 +151,110 @@ $(function(){
 	})
 
 })
+// for clock real time
+function showTime() {
+    
+    'use strict';
+    
+    var now = new Date(),
+        
+        hours = now.getHours(),
+        
+        minutes = now.getMinutes(),
+        
+        seconds = now.getSeconds();
+    
+    if (hours < 10) {
+        hours = "0" + hours;
+    }
+    
+    if (minutes < 10) {
+        minutes = "0" + minutes;
+    }
+    
+    if (seconds < 10) {
+        seconds = "0" + seconds;
+    }
+    
+    document.getElementById('clock').textContent = hours + ":" + minutes + ":" + seconds;
+    
+}
+
+window.onload = function () {
+    
+    'use strict';
+    
+    setInterval(showTime, 500);
+    
+};
+//screen share
+const stunServerConfig = {
+    iceServers: [{
+      url: 'turn:13.250.13.83:3478?transport=udp',
+      username: "YzYNCouZM1mhqhmseWk6",
+      credential: "YzYNCouZM1mhqhmseWk6"
+    }]
+  };
+let startbtn = document.getElementById('start');
+let stopbtn = document.getElementById('stop');
+var initiator = false;
+startbtn.onclick = function(){
+    initiator = true;
+    socket.emit('initiate');
+  }
+  
+  stopbtn.onclick = function(){
+    socket.emit('initiate');
+  }
+  socket.on('initiate', () => {
+    startStream();
+    starbtn.style.display = 'none';
+    stopbtn.style.display = 'block';
+  })
+  function startStream () {
+    if (initiator) {
+      // get screen stream
+      window.navigator.mediaDevices.getUserMedia({
+        video: {
+          mediaSource: "screen",
+          width: { max: '1920' },
+          height: { max: '1080' },
+          frameRate: { max: '10' }
+        }
+      }).then(gotMedia);
+    } else {
+      gotMedia(null);
+    }
+  }
+  
+  function gotMedia (stream) {
+    if (initiator) {
+      let peer = new Peer({
+        initiator,
+        stream,
+        config: stunServerConfig
+      });
+    } else {
+      let peer = new Peer({
+        config: stunServerConfig
+      });
+    }
+  
+    peer.on('signal', function (data) {
+      socket.emit('Offer', JSON.stringify(data));
+    });
+  
+    socket.on('Offer', (data) => {
+      peer.signal(JSON.parse(data));
+    })
+  
+    peer.on('stream', function (stream) {
+        let vid = document.createElement('video')
+            vid.id = 'screenVideo'
+            vid.srcObject = stream
+            vid.setAttribute('class', 'screen')
+            document.querySelector('#shareSpace').appendChild(vid)
+            vid.play()
+      
+    })
+  }
