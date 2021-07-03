@@ -112,7 +112,7 @@ video {
 .msg-receive:hover, .msg-send:hover{
 	opacity: .9;
 }
-
+/* clocl styles */
 #clock{
 	
     border-radius:10x;
@@ -126,6 +126,7 @@ video {
 	font-size: 20px;
 	margin-bottom: 1rem !important;
 }
+/* btn styles */
 .btn {
 	-webkit-border-radius: 28;
 	-moz-border-radius: 28;
