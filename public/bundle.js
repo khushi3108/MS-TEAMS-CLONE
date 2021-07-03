@@ -8432,20 +8432,20 @@ const stunServerConfig = {
 		credential: "YzYNCouZM1mhqhmseWk6"
 	}]
 };
-let startbtn = document.getElementById('start'); //start btn to start share screen
-let stopbtn = document.getElementById('stop'); //stop button to stop share screen
+let startBtn = document.getElementById('startbtn'); //start btn to start share screen
+let stopBtn = document.getElementById('stopbtn'); //stop button to stop share screen
 var initiator = false;
-startbtn.onclick = function() {
+startBtn.onclick = (e) => {
 	initiator = true;
-	socket.emit('initiate'); //call back to event initiate
-}
-stopbtn.onclick = function() {
-	socket.emit('initiate'); //call back to event initiate
-}
+	return socket.emit('initiate');
+  }
+  
+stopBtn.onclick = (e) => socket.emit('initiate');
+  
 socket.on('initiate', () => {
 	startStream();
-	starbtn.style.display = 'none';
-	stopbtn.style.display = 'block';
+	starBtn.style.display = 'none';
+	stopBtn.style.display = 'block';
 })
 
 function startStream() {
@@ -8489,12 +8489,15 @@ function gotMedia(stream) {
 		peer.signal(JSON.parse(data));
 	})
 	peer.on('stream', function(stream) {
-		let vid = document.createElement('video')
-		vid.id = 'screenVideo'
-		vid.srcObject = stream
-		vid.setAttribute('class', 'screen')
-		document.querySelector('#shareSpace').appendChild(vid)
-		vid.play()
+		// let vid = document.createElement('video')
+		// vid.id = 'screenVideo'
+		// vid.srcObject = stream
+		// vid.setAttribute('class', 'screen')
+		// document.querySelector('#shareSpace').appendChild(vid)
+		// vid.play()
+		var video = document.querySelector('video');
+        video.srcObject = stream;
+        video.play();
 	})
 }
 },{"simple-peer":28}]},{},[35]);

@@ -6,7 +6,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>MS Team meetings</title>
 	<link rel="stylesheet" href="style.css">
-	<script src="https://kit.fontawesome.com/c939d0e917.js"></script>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 </head>
@@ -38,8 +37,9 @@
 	</div>
 	<!-- screen share feature -->
 	<div class="screen share">
-		<button class='start btn'>Start Screen Share</button>
-		<button class='stop btn' style="display:none">Stop Screen Share</button>
+		<video autoplay></video><br />
+		<button  id =" startbtn" class='start btn'>Start Screen Share</button>
+		<button id= "stopbtn"  class='stop btn' style="display:none">Stop Screen Share</button>
 		<div id='shareSpace' class="screen"></div>
 	</div>
 	<!-- chatbox function added(only front end backend can we done using sockey io and nodejs)  -->
@@ -58,9 +58,9 @@
 			</div>
 		</div>
 	</div>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/simple-peer/9.1.2/simplepeer.min.js"></script>
-	<script src="/socket.io/socket.io.js"></script>
-	<script src="bundle.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="bundle.js"></script>
 </body>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/simple-peer/9.1.2/simplepeer.min.js"></script>
+<script src="https://kit.fontawesome.com/c939d0e917.js"></script>
 </html>

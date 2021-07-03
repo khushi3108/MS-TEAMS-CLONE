@@ -134,12 +134,12 @@ video {
 	font-family: Arial;
 	color: #ffffff;
 	font-size: 13px;
-	background: #4e508a;
+	background: #4e508a !important;
 	padding: 10px 9px 10px 9px;
 	text-decoration: none;
   }
   
 .btn:hover {
-	background: #a8a9cf;
+	background: #a8a9cf !important;
 	text-decoration: none;
   }
