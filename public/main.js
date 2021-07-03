@@ -2,7 +2,6 @@ let Peer = require('simple-peer')
 let socket = io() // initializing socket element which connects directly to host .
 const checkboxTheme = document.querySelector('.theme') //for adding theme fns
 const video = document.querySelector('video') //This is the video while video streaming.
-var text = 'session active. Please visit when clients less than 2'
 let client = {}
 video.muted = true //Here we have muted this video so that we get to hear other person's voice in the video call and not just ours.
 	/*getting the video stream of client side(or the other user who has the url)
@@ -78,7 +77,8 @@ navigator.mediaDevices.getUserMedia({
 		}
 		//function when 2 people are chatting and session is live and another person with same url tries to join
 		function activeSession() {
-			document.send(warning)
+			var warning = "session active. Please visit when clients less than 2"
+			document.write(warning)
 		}
 
 		function removePeer() {
