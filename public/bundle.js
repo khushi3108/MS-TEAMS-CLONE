@@ -8495,7 +8495,7 @@ function startStream() {
 }
 
 function gotMedia(stream) {
-	let peer={}
+	let peer = {}
 	if(initiator) {
 		peer = new Peer({
 			initiator,
@@ -8515,6 +8515,7 @@ function gotMedia(stream) {
 	})
 	peer.on('stream', function(stream) {
 		let vid = document.querySelector('video')
+		vid.id = 'screenVid'
 		vid.srcObject = stream
 		// document.querySelector('#screen').appendChild(vid)
 		vid.play()
