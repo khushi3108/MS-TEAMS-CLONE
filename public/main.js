@@ -193,7 +193,7 @@ window.onload = function() {
 //screen share
 const stunServerConfig = {
 	iceServers: [{
-		url: 'turn:13.250.13.83:3478?transport=udp',
+		urls: 'turn:13.250.13.83:3478?transport=udp',
 		username: "YzYNCouZM1mhqhmseWk6",
 		credential: "YzYNCouZM1mhqhmseWk6"
 	}]
