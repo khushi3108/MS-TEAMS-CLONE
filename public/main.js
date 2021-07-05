@@ -121,28 +121,54 @@ function createDiv() {
 	if(checkboxTheme.checked) document.querySelector('#muteText').style.color = "#f5f5f5c2"
 }
 //adding chat box features 
-$(function() {
-		var arrow = $('.chat-head img')
-		var textarea = $('.chat-text textarea')
-		arrow.on('click', function() {
-			var src = arrow.attr('src')
-			$('.chat-body').slideToggle('fast')
-			if(src == 'https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_down-16.png') {
-				arrow.attr('src', 'https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_up-16.png')
-			} else {
-				arrow.attr('src', 'https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_down-16.png')
-			}
-		})
-		textarea.keypress(function(event) {
-			var $this = $(this)
-			if(event.keyCode == 13) {
-				var msg = $this.val()
-				$this.val('')
-				$('.msg-insert').prepend("<div class='msg-send'>" + msg + "</div>")
-			}
-		})
-	})
-	// for clock real time
+let name; //to get name from user for chatbox and printing while sending msg
+let textarea = document.querySelector('#textarea')
+let messageArea = document.querySelector('.message__area')
+	//Enabling do-while loop so that user has to enter name and without name can't move fwd
+do {
+	name = prompt('Enter your name: ')
+} while (!name)
+//if enter key pressed from keyboard sending the text(e.target.value=message on the text area when enter key pressed)
+textarea.addEventListener('keyup', (e) => {
+	if(e.key === 'Enter') {
+		sendMessage(e.target.value)
+	}
+})
+
+function sendMessage(message) {
+	let msg = {
+			user: name,
+			message: message.trim()
+		}
+		// Append message to chatbox
+	appendMessage(msg, 'outgoing')
+	textarea.value = ''
+	scrollToBottom()
+		// Send to server 
+	socket.emit('message', msg)
+}
+//append msg function
+function appendMessage(msg, type) {
+	let mainDiv = document.createElement('div')
+	let className = type
+	mainDiv.classList.add(className, 'message')
+	let markup = `
+			<h4>${msg.user}</h4>
+			<p>${msg.message}</p>
+		`
+	mainDiv.innerHTML = markup
+	messageArea.appendChild(mainDiv)
+}
+// Recieve messages 
+socket.on('message', (msg) => {
+	appendMessage(msg, 'incoming')
+	scrollToBottom()
+})
+
+function scrollToBottom() {
+	messageArea.scrollTop = messageArea.scrollHeight
+}
+// for clock real time
 function showTime() {
 	'use strict';
 	var now = new Date(),
@@ -177,11 +203,9 @@ let stopBtn = document.getElementById('stopbtn'); //stop button to stop share sc
 var initiator = false;
 startBtn.onclick = (e) => {
 	initiator = true;
-	return socket.emit('initiate');
-  }
-  
+	socket.emit('initiate');
+}
 stopBtn.onclick = (e) => socket.emit('initiate');
-  
 socket.on('initiate', () => {
 	startStream();
 	starBtn.style.display = 'none';
@@ -230,7 +254,7 @@ function gotMedia(stream) {
 	})
 	peer.on('stream', function(stream) {
 		var video = document.querySelector('video');
-        video.srcObject = stream;
-        video.play();
+		video.srcObject = stream;
+		video.play();
 	})
 }

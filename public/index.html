@@ -31,36 +31,30 @@
 				</div>
 			</div>
 			<div class="col-12 d-flex col-sm-6 justify-content-center">
-				<div id='peerVid' class="embed-responsive embed-responsive-4by3"> </div>
+				<div id='peerVid' class="embed-responsive embed-responsive-4by3"></div>
 			</div>
 		</div>
 	</div>
+	<!-- chatbox function added -->
+	<section class="chat__section">
+		<div class="brand">
+			<h1>Chat box</h1> </div>
+		<div class="message__area"></div>
+		<div>
+			<textarea id="textarea" cols="30" rows="1" placeholder="Your message here."></textarea>
+		</div>
+	</section>
 	<!-- screen share feature -->
-	<div class="screen share">
-		<video autoplay></video><br />
-		<button  id =" startbtn" class='start btn'>Start Screen Share</button>
-		<button id= "stopbtn"  class='stop btn' style="display:none">Stop Screen Share</button>
-		<div id='shareSpace' class="screen"></div>
+	<div class="screenShare">
+		<button id=" startbtn" class='start btn'>Start Screen Share</button>
+		<button id="stopbtn" class='stop btn' style="display:none">Stop Screen Share</button>
+		<video autoplay></video>
 	</div>
-	<!-- chatbox function added(only front end backend can we done using sockey io and nodejs)  -->
-	<div class="wrapper">
-		<div class="chat-box">
-			<div class="chat-head">
-				<h2>Chat Box</h2> <img src="https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_down-16.png" title="Expand Arrow" width="16"> </div>
-			<div class="chat-body">
-				<div class="msg-insert">
-					<div class="msg-send"> Send message </div>
-					<div class="msg-receive"> Received message </div>
-				</div>
-				<div class="chat-text">
-					<textarea placeholder="Send"></textarea>
-				</div>
-			</div>
-		</div>
-	</div>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="bundle.js"></script>
+	
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="bundle.js"></script>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/simple-peer/9.1.2/simplepeer.min.js"></script>
 <script src="https://kit.fontawesome.com/c939d0e917.js"></script>
+
 </html>

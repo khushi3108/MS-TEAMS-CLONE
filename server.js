@@ -8,6 +8,10 @@ app.use(express.static(__dirname + "/public"))
 let clients = 0
 	//initial clients =0
 	//setting io connections when both clients ready ans as soon as front-end and back-end connection is made
+app.get('/', (req, res) => {
+		res.sendFile(__dirname + '/public/index.html')
+	})
+	
 io.on('connection', function(socket) {
 	socket.on("NewUser", function() {
 		if(clients < 2) {
@@ -17,6 +21,9 @@ io.on('connection', function(socket) {
 		} else this.emit('sessionActive') //session already going on
 		clients++;
 	})
+	socket.on('message', (msg) => {
+     socket.broadcast.emit('message', msg)//socket server for chat in real time
+    })
 	socket.on('offer', makeOffer)
 	socket.on('Answer', sendAnswer)
 	socket.on('disconnect', Disconnect) //if window closed disconnect should run which will decrease the clients
