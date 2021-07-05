@@ -208,14 +208,14 @@ startBtn.onclick = (e) => {
 stopBtn.onclick = (e) => socket.emit('initiate');
 socket.on('initiate', () => {
 	startStream();
-	starBtn.style.display = 'none';
+	startBtn.style.display = 'none';
 	stopBtn.style.display = 'block';
 })
 
 function startStream() {
 	if(initiator) {
 		// get screen stream
-		window.navigator.mediaDevices.getUserMedia({
+		navigator.mediaDevices.getUserMedia({
 			video: {
 				mediaSource: "screen",
 				width: {
@@ -235,14 +235,15 @@ function startStream() {
 }
 
 function gotMedia(stream) {
+	let peer={}
 	if(initiator) {
-		let peer = new Peer({
+		peer = new Peer({
 			initiator,
 			stream,
 			config: stunServerConfig
 		});
 	} else {
-		let peer = new Peer({
+		peer = new Peer({
 			config: stunServerConfig
 		});
 	}
@@ -253,8 +254,10 @@ function gotMedia(stream) {
 		peer.signal(JSON.parse(data));
 	})
 	peer.on('stream', function(stream) {
-		var video = document.querySelector('video');
-		video.srcObject = stream;
-		video.play();
+		let vid = document.querySelector('video')
+		vid.srcObject = stream
+		// document.querySelector('#screen').appendChild(vid)
+		vid.play()
+		
 	})
 }
